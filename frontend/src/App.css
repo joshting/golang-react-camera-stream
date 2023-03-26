@@ -1,0 +1,13 @@
+img {
+  aspect-ratio: 4/3;
+}
+
+img.single-stream {
+  height: calc(100vh - 100px);
+  width: fit-content;
+}
+
+.main-content {
+  height: calc(100vh - 100px) !important;
+  align-items: center;
+}
