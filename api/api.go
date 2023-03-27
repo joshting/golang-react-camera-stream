@@ -17,6 +17,8 @@ type VideoStream struct {
 
 var streams = []VideoStream{}
 
+const dataPath = "data/streams.json"
+
 func refreshIds() {
 	for i, _ := range streams {
 		streams[i].Id = (i + 1)
@@ -24,7 +26,7 @@ func refreshIds() {
 }
 
 func LoadStreams() {
-	file, _ := ioutil.ReadFile("config.json")
+	file, _ := ioutil.ReadFile(dataPath)
 	_ = json.Unmarshal([]byte(file), &streams)
 }
 
@@ -67,7 +69,7 @@ func SaveStream(c *gin.Context) {
 		streams = append(streams, newStream)
 	}
 	file, _ := json.MarshalIndent(streams, "", " ")
-	_ = ioutil.WriteFile("config.json", file, 0644)
+	_ = ioutil.WriteFile(dataPath, file, 0644)
 	c.IndentedJSON(http.StatusCreated, newStream)
 }
 
@@ -81,7 +83,7 @@ func DeleteStream(c *gin.Context) {
 		refreshIds()
 
 		file, _ := json.MarshalIndent(streams, "", " ")
-		_ = ioutil.WriteFile("config.json", file, 0644)
+		_ = ioutil.WriteFile(dataPath, file, 0644)
 		c.Status(http.StatusOK)
 	} else {
 		c.Status(http.StatusBadRequest)

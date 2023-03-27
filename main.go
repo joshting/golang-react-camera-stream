@@ -21,8 +21,8 @@ func main() {
 
 	router.GET("/", returnIndexHtml)
 	router.GET("/stream/:streamId", returnIndexHtml)
-	// router.Static("/home", "./frontend/dist/")
-	router.Static("/assets", "./frontend/dist/assets")
+	router.Static("/assets", "frontend/dist/assets")
+	router.StaticFile("/icon.svg", "frontend/dist/icon.svg")
 
 	api.LoadStreams()
 

@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  video-wall:
+    image: video-wall:latest
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    volumes:
+      - streams:/go/bin/data
+
+volumes:
+  streams:
