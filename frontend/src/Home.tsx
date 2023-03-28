@@ -11,28 +11,33 @@ interface VideoStreamInput {
 }
 
 function Home() {
-  //   const mockData: VideoStream[] = [
-  //     {
-  //       id: 1,
-  //       name: "camera 1",
-  //       wsUrl: "ws://localhost:8081",
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "camera 2",
-  //       wsUrl: "ws://localhost:8081",
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "camera 3",
-  //       wsUrl: "ws://localhost:8081",
-  //     },
-  //     {
-  //       id: 4,
-  //       name: "camera 4",
-  //       wsUrl: "ws://localhost:8081",
-  //     },
-  //   ];
+
+  useEffect(() => {
+    refreshStreams();
+  }, []);
+
+  const mockData: VideoStream[] = [
+    {
+      id: 1,
+      name: "camera 1",
+      wsUrl: "ws://localhost:8081",
+    },
+    {
+      id: 2,
+      name: "camera 2",
+      wsUrl: "ws://localhost:8081",
+    },
+    {
+      id: 3,
+      name: "camera 3",
+      wsUrl: "ws://localhost:8081",
+    },
+    {
+      id: 4,
+      name: "camera 4",
+      wsUrl: "ws://localhost:8081",
+    },
+  ];
 
   const navigate = useNavigate();
 
@@ -40,7 +45,7 @@ function Home() {
 
   const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
-  const [streams, setStreams] = useState<VideoStream[]>([]);
+  const [streams, setStreams] = useState<VideoStream[]>(mockData);
 
   const showModal = () => {
     setIsOpen(true);
@@ -67,7 +72,7 @@ function Home() {
   const [disabled, setDisabled] = useState(true);
 
   const refreshStreams = () => {
-    fetch("http://localhost:8080/api/all")
+    fetch("/api/all")
       .then((res) => res.json())
       .then(
         (streams) => {
@@ -82,13 +87,14 @@ function Home() {
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
     const value = event.target.value;
+    const wsValid = wsUrlRegex.test(inputs.wsUrl);
     setInputs((values) => ({ ...values, [name]: value }));
-    setDisabled(inputs.name === "" || inputs.wsUrl === "");
+    setDisabled(inputs.name === "" || inputs.wsUrl === "" || !wsValid);
   };
 
   const handleFormSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch("http://localhost:8080/api/save", {
+    fetch("/api/save", {
       method: "POST",
       body: JSON.stringify(inputs),
     })
@@ -101,7 +107,7 @@ function Home() {
 
   const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch("http://localhost:8080/api/delete/" + inputs.id, {
+    fetch("/api/delete/" + inputs.id, {
       method: "DELETE",
       body: JSON.stringify(inputs),
     }).then((_) => {
@@ -109,10 +115,6 @@ function Home() {
     });
     hideDeleteModal();
   };
-
-  useEffect(() => {
-    refreshStreams();
-  }, []);
 
   const newStream = () => {
     setInputs({
@@ -137,9 +139,11 @@ function Home() {
     navigate("/stream/" + item.id);
   };
 
+  const wsUrlRegex = /^wss?:\/\/(?:www\.)?(?:localhost|[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b)(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light px-2">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-2">
         <a className="navbar-brand ml-1" href="#">
           Video Wall
         </a>
@@ -211,7 +215,7 @@ function Home() {
           <div className="mb-3">Deleting stream {inputs.name}?</div>
         </Modal.Body>
         <Modal.Footer>
-          <button className="btn btn-primary" onClick={hideModal}>
+          <button className="btn btn-primary" onClick={hideDeleteModal}>
             Cancel
           </button>
           <button className="btn btn-primary" onClick={handleDelete}>

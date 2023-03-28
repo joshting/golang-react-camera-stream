@@ -46,33 +46,28 @@ const SingleStream = () => {
         }
       );
 
-    return () => {};
+    return () => { };
   }, []);
 
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light px-2">
-        <a className="navbar-brand ml-1" href="#">
-          Video Wall
-        </a>
-        <ul className="nav navbar-nav ms-auto">
-          <button
-            className="btn btn-primary"
-            data-toggle="modal"
-            data-target="#newStream"
-            onClick={goHome}
-          >
-            Go Home
-          </button>
-        </ul>
-      </nav>
-      <div className="card main-content">
-        <img className="card-img-top single-stream" src={imgSrc}></img>
+    <div className="single-stream-wrapper">
+      <div className="card">
+        <div className="single-stream-img">
+          <img src={imgSrc}></img>
+        </div>
         <div className="card-body">
           <span className="fs-6 fw-semibold">{stream.name}</span>
+          <span className="float-end">
+            <button
+              className="btn btn-outline-secondary btn-sm"
+              onClick={goHome}
+            >
+              <i className="bi-fullscreen-exit"></i>
+            </button>
+          </span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

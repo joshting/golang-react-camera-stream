@@ -24,13 +24,17 @@ const VideoCard = ({
 
   useEffect(() => {
     if (wsUrl !== "") {
-      webSocket = new WebSocket(wsUrl);
-      webSocket.onmessage = (event: MessageEvent<any>) => {
-        let payload = JSON.parse(event.data);
-        setImgSrc(`data:image/png;base64,${payload.data}`);
-      };
+      try {
+        webSocket = new WebSocket(wsUrl);
+        webSocket.onmessage = (event: MessageEvent<any>) => {
+          let payload = JSON.parse(event.data);
+          setImgSrc(`data:image/png;base64,${payload.data}`);
+        };
+      } catch (e) {
+        console.error('Failed to connect to websocket', wsUrl, e);
+      }
     }
-    return () => {};
+    return () => { };
   }, []);
 
   const handleClickEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,7 +65,9 @@ const VideoCard = ({
 
   return (
     <div className="card">
+      {/* <div className="card-img-wrapper"> */}
       <img className="card-img-top" src={imgSrc}></img>
+      {/* </div> */}
       <div className="card-body">
         <span className="fs-6 fw-semibold">{name}</span>
         <span className="float-end">
@@ -72,7 +78,7 @@ const VideoCard = ({
             <i className="bi-trash"></i>
           </button>
           <button
-            className="btn btn-outline-secondary btn-sm"
+            className="btn btn-outline-secondary btn-sm me-1"
             onClick={handleClickEdit}
           >
             <i className="bi-pencil"></i>
@@ -81,7 +87,7 @@ const VideoCard = ({
             className="btn btn-outline-secondary btn-sm"
             onClick={handleSingleStreamView}
           >
-            <i className="bi-arrows-fullscreen"></i>
+            <i className="bi-fullscreen"></i>
           </button>
         </span>
       </div>

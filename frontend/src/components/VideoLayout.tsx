@@ -28,7 +28,7 @@ const VideoLayout = ({
   };
 
   return (
-    <div className="container">
+    <div className="container mt-4">
       <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
         {videoStreams.length === 0 && (
           <div className="position-relative w-100 main-content">
