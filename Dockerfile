@@ -38,6 +38,6 @@ FROM scratch
 COPY --from=react_builder /frontend /go/bin/frontend
 # Copy GOLANG executable and data
 COPY --from=go_builder /go/bin/ /go/bin
-
+WORKDIR /go/bin/
 # Run the executable
 ENTRYPOINT ["/go/bin/app"]

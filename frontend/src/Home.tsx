@@ -16,36 +16,13 @@ function Home() {
     refreshStreams();
   }, []);
 
-  const mockData: VideoStream[] = [
-    {
-      id: 1,
-      name: "camera 1",
-      wsUrl: "ws://localhost:8081",
-    },
-    {
-      id: 2,
-      name: "camera 2",
-      wsUrl: "ws://localhost:8081",
-    },
-    {
-      id: 3,
-      name: "camera 3",
-      wsUrl: "ws://localhost:8081",
-    },
-    {
-      id: 4,
-      name: "camera 4",
-      wsUrl: "ws://localhost:8081",
-    },
-  ];
-
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
 
   const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
-  const [streams, setStreams] = useState<VideoStream[]>(mockData);
+  const [streams, setStreams] = useState<VideoStream[]>([]);
 
   const showModal = () => {
     setIsOpen(true);
