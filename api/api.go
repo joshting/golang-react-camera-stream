@@ -19,32 +19,39 @@ var streams = []VideoStream{}
 
 const dataPath = "data/streams.json"
 
+func Init(router *gin.Engine) {
+	loadStreams()
+	router.GET("/api/all", getStreams)
+	router.GET("/api/byid/:id", getById)
+	router.DELETE("/api/delete/:id", deleteStream)
+	router.POST("/api/save", saveStream)
+}
+
 func refreshIds() {
 	for i, _ := range streams {
 		streams[i].Id = (i + 1)
 	}
 }
 
-func LoadStreams() {
+func loadStreams() {
 	file, _ := ioutil.ReadFile(dataPath)
 	_ = json.Unmarshal([]byte(file), &streams)
 }
 
-func GetStreams(c *gin.Context) {
+func getStreams(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, streams)
 }
 
-func GetById(c *gin.Context) {
+func getById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err == nil && id > 0 && id <= len(streams) {
-
 		c.IndentedJSON(http.StatusOK, streams[id-1])
 	} else {
 		c.Status(http.StatusBadRequest)
 	}
 }
 
-func SaveStream(c *gin.Context) {
+func saveStream(c *gin.Context) {
 	var newStream VideoStream
 
 	if err := c.BindJSON(&newStream); err != nil {
@@ -61,27 +68,25 @@ func SaveStream(c *gin.Context) {
 			}
 		}
 	} else {
-
 		refreshIds()
-
 		// new stream
 		newStream.Id = len(streams) + 1
 		streams = append(streams, newStream)
 	}
+
 	file, _ := json.MarshalIndent(streams, "", " ")
 	_ = ioutil.WriteFile(dataPath, file, 0644)
 	c.IndentedJSON(http.StatusCreated, newStream)
 }
 
-func DeleteStream(c *gin.Context) {
+func deleteStream(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
+
 	if err == nil && id > 0 && id <= len(streams) {
 		streams[id-1] = streams[len(streams)-1]
 		streams[len(streams)-1] = VideoStream{}
 		streams = streams[:len(streams)-1]
-
 		refreshIds()
-
 		file, _ := json.MarshalIndent(streams, "", " ")
 		_ = ioutil.WriteFile(dataPath, file, 0644)
 		c.Status(http.StatusOK)

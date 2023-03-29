@@ -1,36 +1,17 @@
 package main
 
 import (
-	_ "embed"
-
 	"github.com/gin-gonic/gin"
 	"joshuating.com/videostream/api"
+	"joshuating.com/videostream/web"
 )
-
-//go:embed frontend/dist/index.html
-var indexhtml []byte
-
-func returnIndexHtml(c *gin.Context) {
-	c.Header("Content-Type", "text/html")
-	_, _ = c.Writer.Write(indexhtml)
-}
 
 func main() {
 
 	router := gin.Default()
 
-	router.GET("/", returnIndexHtml)
-	router.GET("/stream/:streamId", returnIndexHtml)
-	router.Static("/assets", "frontend/dist/assets")
-	router.StaticFile("/icon.svg", "frontend/dist/icon.svg")
-
-	api.LoadStreams()
-
-	// rest apis
-	router.GET("/api/all", api.GetStreams)
-	router.GET("/api/byid/:id", api.GetById)
-	router.DELETE("/api/delete/:id", api.DeleteStream)
-	router.POST("/api/save", api.SaveStream)
+	web.Init(router)
+	api.Init(router)
 
 	router.Run(":8080")
 

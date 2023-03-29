@@ -3,7 +3,7 @@
 ########################
 FROM node:alpine AS react_builder
 WORKDIR /
-COPY frontend .
+COPY web/frontend /frontend
 WORKDIR /frontend
 # install dependencies
 RUN npm install --silent
@@ -35,7 +35,7 @@ COPY data /go/bin/data
 FROM scratch
 
 # Copy React frontend
-COPY --from=react_builder /frontend /go/bin/frontend
+COPY --from=react_builder /frontend /go/bin/web/frontend
 # Copy GOLANG executable and data
 COPY --from=go_builder /go/bin/ /go/bin
 WORKDIR /go/bin/
