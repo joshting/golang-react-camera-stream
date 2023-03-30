@@ -1,0 +1,17 @@
+#################################
+# build distroless docker image #
+#################################
+# This assumes that the frontend code has been built and the GOLANG
+# code has been statically compiled
+# i.e. run build_web.sh and build_go.sh
+
+FROM scratch
+
+# Copy React frontend
+COPY web/frontend/dist /web/frontend/dist
+
+# Copy GOLANG executable and data
+COPY build/app /app
+
+# Run the executable
+ENTRYPOINT ["/app"]

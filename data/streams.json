@@ -1,17 +1,1 @@
-[
- {
-  "id": 1,
-  "name": "afsdf",
-  "wsUrl": "ws://localhost:8081"
- },
- {
-  "id": 2,
-  "name": "cam 2",
-  "wsUrl": "ws://localhost:8081"
- },
- {
-  "id": 3,
-  "name": "cam4",
-  "wsUrl": "ws://localhost:8081"
- }
-]
+[]

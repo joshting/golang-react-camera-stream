@@ -18,14 +18,29 @@ go build -o app
 ./app
 ```
 
-## Build the Docker image
+## Build the Docker image using Docker Containers
 To build the Docker image, run:
 ```
-docker build --tag video-wall:latest
+docker build --tag video-wall:latest .
 ```
 NOTE: The image tag _video-wall:latest_ is used in the [docker-compose.yaml](docker-compose.yaml).
 
 Then run the app in the Docker container:
+```
+docker-compose up -d
+```
+
+## Build the Docker image manually
+Firstly, build the frontend code and the GOLANG executable (statically linked).  This can be done by referring to or running the scripts [build_web.sh](build_web.sh) and [build_go.sh](build_go.sh)
+```
+./build_web.sh
+./build_go.sh
+```
+Then, build the docker image using [Dockerfile_Precompiled](Dockerfile_Precompiled).
+```
+docker build --tag video-wall:latest -f Dockerfile_Precompiled .
+```
+Then run the app as per normal:
 ```
 docker-compose up -d
 ```
