@@ -18,15 +18,15 @@ FROM golang:alpine AS go_builder
 # Install git.
 # Git is required for fetching the dependencies.
 RUN apk update && apk add --no-cache git
-WORKDIR WORKDIR $GOPATH/src/main/app
+WORKDIR /src
 COPY . .
 # Replace data path with full path in the container
 RUN sed -i "s|data/streams.json|/go/bin/data/streams.json|g" api/api.go
 # Get GOLANG dependencies
 RUN go get -d -v
 # Build GOLANG binary
-RUN go build -o /go/bin/app
-COPY data /go/bin/data
+RUN go build -o /build/app
+COPY data /build/data
 
 
 #######################################
@@ -37,7 +37,6 @@ FROM scratch
 # Copy React frontend
 COPY --from=react_builder /frontend /go/bin/web/frontend
 # Copy GOLANG executable and data
-COPY --from=go_builder /go/bin/ /go/bin
-WORKDIR /go/bin/
+COPY --from=go_builder /build /bin
 # Run the executable
-ENTRYPOINT ["/go/bin/app"]
+ENTRYPOINT ["/bin/app"]
