@@ -3,7 +3,7 @@
 ########################
 FROM node:alpine AS react_builder
 WORKDIR /
-COPY web/frontend /frontend
+COPY frontend /frontend
 WORKDIR /frontend
 # install dependencies
 RUN npm install --silent
@@ -20,8 +20,6 @@ FROM golang:alpine AS go_builder
 RUN apk update && apk add --no-cache git
 WORKDIR /src
 COPY . .
-# Replace data path with full path in the container
-RUN sed -i "s|data/streams.json|/go/bin/data/streams.json|g" api/api.go
 # Get GOLANG dependencies
 RUN go get -d -v
 # Build GOLANG binary
@@ -34,9 +32,17 @@ COPY data /build/data
 #######################################
 FROM scratch
 
+# NOTE: where the frontend and data directories are in relation
+# to the GOLANG executable is very important. In this case:
+# /app - executable
+# /frontend/dist - the compiled frontend
+# /data - directory containing the JSON
+
 # Copy React frontend
-COPY --from=react_builder /frontend /go/bin/web/frontend
+COPY --from=react_builder /frontend/dist /frontend/dist
 # Copy GOLANG executable and data
-COPY --from=go_builder /build /bin
+COPY --from=go_builder /build/app /app
+COPY --from=go_builder /build/data /data
+
 # Run the executable
-ENTRYPOINT ["/bin/app"]
+ENTRYPOINT ["/app"]
