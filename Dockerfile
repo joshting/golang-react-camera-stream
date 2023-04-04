@@ -18,6 +18,10 @@ FROM golang:alpine AS go_builder
 # Install git.
 # Git is required for fetching the dependencies.
 RUN apk update && apk add --no-cache git
+# ensure the path frontend/dist/index.html exists
+# so that # go:embed won't throw error
+WORKDIR /src/frontend/dist
+RUN touch /src/frontend/dist/index.html
 WORKDIR /src
 COPY . .
 # Get GOLANG dependencies

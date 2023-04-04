@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// the following go:embed will have error until the frontend is built
+
 //go:embed frontend/dist/index.html
 var indexhtml []byte
 
