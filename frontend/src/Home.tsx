@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Navigate, useNavigate } from "react-router-dom";
-import VideoLayout from "./components/VideoLayout";
+import { useNavigate } from "react-router-dom";
+import VideoCard from "./components/VideoCard";
 import { VideoStream } from "./dtos/VideoStream";
 
 interface VideoStreamInput {
@@ -102,17 +102,17 @@ function Home() {
     showModal();
   };
 
-  const onEdit = (item: VideoStream) => {
+  const handleOnEdit = (item: VideoStream) => {
     setInputs(item);
     showModal();
   };
 
-  const onDelete = (item: VideoStream) => {
+  const handleOnDelete = (item: VideoStream) => {
     setInputs(item);
     showDeleteModal();
   };
 
-  const onSingleStreamView = (item: VideoStream) => {
+  const handleOnSingleStreamView = (item: VideoStream) => {
     navigate("/stream/" + item.id);
   };
 
@@ -135,12 +135,28 @@ function Home() {
           </button>
         </ul>
       </nav>
-      <VideoLayout
-        videoStreams={streams}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        onSingleStreamView={onSingleStreamView}
-      ></VideoLayout>
+      <div className="container mt-4">
+        <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+          {streams.length === 0 && (
+            <div className="position-relative w-100 main-content">
+              <div className="position-absolute top-50 start-50 translate-middle">
+                <h3>No Streams</h3>
+              </div>
+            </div>
+          )}
+          {streams.map((stream, index) => (
+            <div className="col">
+              <VideoCard
+                key={stream.id}
+                stream={stream}
+                onEdit={handleOnEdit}
+                onDelete={handleOnDelete}
+                onSingleStreamView={handleOnSingleStreamView}
+              ></VideoCard>
+            </div>
+          ))}
+        </div>
+      </div>
       <Modal show={isOpen}>
         <Modal.Header>
           {inputs.id > 0 ? "Edit" : "New"} Video Stream

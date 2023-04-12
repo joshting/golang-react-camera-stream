@@ -18,7 +18,10 @@ FROM golang:alpine AS go_builder
 # Install git.
 # Git is required for fetching the dependencies.
 RUN apk update && apk add --no-cache git
-WORKDIR /src
+# observed that in order for # go:embed to work
+# the actual file must be present
+COPY --from=react_builder /frontend/dist /frontend/dist
+WORKDIR /
 COPY . .
 # Get GOLANG dependencies
 RUN go get -d -v

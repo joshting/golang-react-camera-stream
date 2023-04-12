@@ -7,9 +7,10 @@ img {
   align-items: center;
 }
 
-.single-stream-wrapper {
+.card-img-wrapper {
   width: 100%;
   padding: 10px;
+  align-items: center;
 }
 
 .single-stream-img {
@@ -21,4 +22,26 @@ img {
 .single-stream-img>img {
   height: 100%;
   width: fit-content !important;
+}
+
+.video-wrapper {
+  position: relative;
+}
+
+.video-wrapper>svg {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+rect {
+  stroke-width: 2px;
+  stroke: deeppink;
+  fill: transparent;
+}
+
+.bbox-text {
+  stroke: white;
+  font-weight: 300;
+  font-size: 0.8rem;
 }

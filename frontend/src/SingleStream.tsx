@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { VideoStream } from "./dtos/VideoStream";
 import "./App.css";
-
-// interface Props {
-//   id: number;
-//   name: string;
-//   wsUrl: string;
-// }
+import VideoCard from "./components/VideoCard";
 
 const SingleStream = () => {
   let { streamId } = useParams();
@@ -20,7 +15,7 @@ const SingleStream = () => {
     wsUrl: "",
   });
 
-  const goHome = () => {
+  const handleExitSingleStreamView = () => {
     navigate("/");
   };
 
@@ -51,22 +46,11 @@ const SingleStream = () => {
 
   return (
     <div className="single-stream-wrapper">
-      <div className="card">
-        <div className="single-stream-img">
-          <img src={imgSrc}></img>
-        </div>
-        <div className="card-body">
-          <span className="fs-6 fw-semibold">{stream.name}</span>
-          <span className="float-end">
-            <button
-              className="btn btn-outline-secondary btn-sm"
-              onClick={goHome}
-            >
-              <i className="bi-fullscreen-exit"></i>
-            </button>
-          </span>
-        </div>
-      </div>
+      <VideoCard
+        key={stream.id}
+        stream={stream}
+        onExitSingleStreamView={handleExitSingleStreamView}
+      ></VideoCard>
     </div>
   );
 };

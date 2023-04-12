@@ -44,3 +44,6 @@ Then run the app as per normal:
 ```
 docker-compose up -d
 ```
+
+## Getting the video feed
+Run the example in [https://github.com/joshting/python-cv2-webcam-stream](https://github.com/joshting/python-cv2-webcam-stream)
