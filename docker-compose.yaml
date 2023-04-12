@@ -7,7 +7,7 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - streams:/go/bin/data
+      - streams:/data
 
 volumes:
   streams:
