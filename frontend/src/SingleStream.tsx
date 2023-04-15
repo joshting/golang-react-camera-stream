@@ -23,7 +23,7 @@ const SingleStream = () => {
   let webSocket: WebSocket;
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/byid/" + streamId)
+    fetch("/api/byid/" + streamId)
       .then((res) => res.json())
       .then(
         (stream) => {
